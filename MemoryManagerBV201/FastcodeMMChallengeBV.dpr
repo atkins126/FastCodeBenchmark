@@ -18,6 +18,12 @@ See the file ReleaseNotes.txt for more details
 {$I FASTCODE_MM.INC}
 
 uses
+{$IFDEF MM_FASTMM5}
+  FastMM5 // Pierre le Riche's Fastcode challenge entry v5.xx
+{$ENDIF}
+{$IFDEF MM_FASTMM4_AVX}
+  FastMM4 // FastMM4-AVX
+{$ENDIF}
 {$IFDEF MM_FASTMM4}
   FastMM4 // Pierre le Riche's Fastcode challenge entry v4.xx
 {$ENDIF}
@@ -80,9 +86,8 @@ uses
 {$IFNDEF MM_RTLMM},{$ENDIF}
 
   // FastMove,   // uncomment if you want to benchmark with FastMove
-
   {Other units}
-  Vcl.Forms,
+  SelfTest in 'SelfTest.pas',
   PrimeNumbers in 'PrimeNumbers.pas' {fBenchmark},
   BenchmarkForm in 'BenchmarkForm.pas' {fBenchmark},
   RenameMMForm in 'RenameMMForm.pas' {fRenameMM},
@@ -121,11 +126,15 @@ uses
   SingleThreadedAllocMem in 'SingleThreadedAllocMem.pas',
   MMvalidation in 'MMvalidation.pas',
   GeneralFunctions in 'GeneralFunctions.pas'
-  {$IFDEF FPC}, Interfaces{$ENDIF};
+  {$IFDEF FPC}, Interfaces{$ENDIF}
+  ,Forms;
 
 {$R *.res}
 
 begin
+{$IFDEF FPC}
+  Application.Scaled:=True;
+{$ENDIF}
   Application.Initialize;
   Application.CreateForm(TfBenchmark, fBenchmark);
   Application.Run;
